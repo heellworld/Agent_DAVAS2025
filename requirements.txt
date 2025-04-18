@@ -1,0 +1,32 @@
+selenium
+pandas
+numpy
+crawl4ai
+nest_asyncio
+# Xử lý dữ liệu
+pandas
+numpy
+python-dotenv
+sqlalchemy
+alembic
+streamlit
+asyncpg
+# API và backend
+fastapi
+uvicorn[standard]
+pydantic
+ollama
+# Chatbot và NLP
+llama-index
+openai
+llama-index-core
+
+llama-index-vector-stores-postgres
+llama-index-embeddings-huggingface
+llama-index-embeddings-openai
+llama-index-readers-llama-parse 
+llama-index-llms-gemini
+llama-index-llms-ollama
+llama-index-llms-openai
+
+
