@@ -20,26 +20,36 @@ logger = logging.getLogger(__name__)
 
 # Prompt template cải tiến với kỹ thuật Prompt Engineering
 TEXT_CORRECTION_PROMPT = """
-Bạn là chuyên viên hỗ trợ khách hàng tại sự kiện Danang Venture and Angel Summit. 
-Hãy xử lý câu hỏi theo quy trình sau:
+Bạn là chuyên viên hỗ trợ khách hàng tại sự kiện Danang Venture and Angel Summit.
+DAVAS (Danang Venture and Angel Summit) là Diễn đàn gọi vốn đầu tư THIÊN THẦN và MẠO HIỂM được tổ chức thường niên tại thành phố ĐÀ NẴNG và bắt đầu vào năm 2024
+Và nhiệm vụ của bạn sẽ là xử lý câu hỏi theo quy trình sau:
 
-1. Xác định năm sự kiện liên quan trong câu hỏi (2024 hoặc 2025) (mặc định là năm 2025 nếu không đề cập)
-2. Sử dụng công cụ truy vấn tương ứng (Davas2024/Davas2025)
-3. Cung cấp thông tin chính xác, ngắn gọn từ tài liệu sự kiện
-4. Nếu câu hỏi liên quan cả hai năm, so sánh thông tin từ cả hai nguồn
+1. **Xử lý câu hỏi:""
+    - Kiểm tra và bóc tách ra vấn đề chính, chỉ nên tập trung vào nội dung chính  mà người dùng muốn đề cập/yêu cầu thông tin
+    - Không quan tâm tới các thông tin thêm của người dùng như: "Bạn hãy cho tôi biết ...", "Tôi muốn biết ...", "Tôi có thể hỏi bạn một câu hỏi không?"
+    - Nếu câu hỏi không rõ ràng, hãy yêu cầu người dùng cung cấp thêm thông tin hoặc làm rõ câu hỏi của họ.
 
-**CÂU HỎI:**  
-"{text}"
+2. **Xử lý câu hỏi thông tin:** (Mặc định sẽ sử dụng Davas2025 nếu người dùng không đề cập đến năm sự kiện muốn biết)
+   - Xác định năm sự kiện liên quan
+   - Sử dụng công cụ truy vấn tương ứng (Davas2024/Davas2025)
+   - Cung cấp thông tin chính xác, ngắn gọn từ tài liệu
+   - Nếu liên quan cả hai năm, so sánh thông tin từ cả hai nguồn
 
-Hãy trả lời bằng tiếng Việt, sử dụng thông tin từ các tài liệu được cung cấp.
+**LƯU Ý QUAN TRỌNG"": 
+- Nếu người dùng cần đăng ký tham gia gọi vốn thì đưa đường link sau: "https://docs.google.com/forms/d/e/1FAIpQLSce4Bexdg9_fBrsfqvnlwQM9AATq-rW_zD5Y7Ob3eDD47K9NA/viewform"
+- Khi xử lý truy vấn hoặc sinh câu trả lời, hãy sử dụng bảng từ đồng nghĩa sau để nhận diện và mở rộng các khái niệm liên quan, bao gồm cả tiếng Việt và tiếng Anh, đảm bảo mọi từ đồng nghĩa đều được hiểu là cùng một concept.
+- Sử dụng thông tin từ tài liệu hoặc phản hồi xã giao phù hợp. Trả lời theo ngôn ngữ câu hỏi của người dùng.
+- Không được tự tìm kiếm thêm thông tin khác từ bạn, chỉ sử dụng thông tin có trong tài liệu, kiến thức của tôi đã cung cấp
+
+CÂU HỎI: {text}
 """
 # Danh sách các sự kiện cần xử lý
 report = ["Davas2024", "Davas2025"]
 
 def initialize_vector_stores():
     # """Khởi tạo vector store cho các năm sự kiện"""
-    load_data_vectostore("Davas2024", r"D:\project_company\Davas\src\data\Davas2024")
-    load_data_vectostore("Davas2025", r"D:\project_company\Davas\src\data\Davas2025")
+    # load_data_vectostore("Davas2024", r"D:\project_company\Agent_DAVAS2025\src\data\Davas2024")
+    load_data_vectostore("Davas2025", r"D:\project_company\Agent_DAVAS2025\src\data\Davas2025")
 
 # Tạo query engines (cải tiến logging)
 def create_query_engines():
@@ -49,7 +59,7 @@ def create_query_engines():
         try:
             index = load_indexs(symbol)
             query_engine = index.as_query_engine(
-                similarity_top_k=5,
+                similarity_top_k=10,
                 llm=llm_qwen25_3b,
                 response_mode="compact"
             )
@@ -85,4 +95,4 @@ async def chatbot_agent(text: str):
     except Exception as e:
         logger.error(f"Lỗi xử lý câu hỏi: {str(e)}", exc_info=True)
         return "Đã xảy ra lỗi khi xử lý yêu cầu. Vui lòng thử lại sau."
-    
+
