@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from llama_index.llms.ollama import Ollama
-from llama_index.llms.openrouter import OpenRouter
+# from llama_index.llms.openrouter import OpenRouter
 from llama_index.llms.gemini import Gemini
 load_dotenv()
 
