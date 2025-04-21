@@ -1,12 +1,13 @@
 import uvicorn
 from src.api import app
 from src.ai_project.agent import initialize_vector_stores
+import asyncio
 
 if __name__ == "__main__":
     # # Khởi tạo vector stores trước khi bắt đầu
     # try:
     #     print("Đang khởi tạo dữ liệu, vui lòng chờ...")
-    #     initialize_vector_stores()
+    #     asyncio.run(initialize_vector_stores())
     #     print("Khởi tạo dữ liệu thành công!")
     # except Exception as e:
     #     print(f"❌ Lỗi khởi tạo dữ liệu: {str(e)}")

@@ -4,15 +4,28 @@ from llama_parse import LlamaParse
 from llama_index.core import (
     VectorStoreIndex, 
     SimpleDirectoryReader,
-    StorageContext,
+    StorageContext
 )
-import logging
-from llama_index.vector_stores.postgres import PGVectorStore
-from config.vectostore import embedd_model, db_name, url  # Sử dụng url từ config
+from llama_index.core.node_parser import SentenceSplitter
+import asyncpg
+import os
+from llama_index.core.vector_stores import MetadataFilters, MetadataFilter
 from sqlalchemy import make_url
+from config.vectostore import embedd_model, db_name, url
+from llama_index.vector_stores.postgres import PGVectorStore
+from llama_index.storage.index_store.postgres import PostgresIndexStore
+import asyncio
+import asyncpg
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import create_async_engine
+import logging
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
+import nest_asyncio
+nest_asyncio.apply() # nest_asyncio để hỗ trợ async lồng nhau
 
+
+        
 def load_data_vectostore(table_name, data_path):
     current_dir = r'D:\project_NCKH\oral-exam-chatbot-'
     env_path = os.path.join(current_dir, '.env')
@@ -26,7 +39,6 @@ def load_data_vectostore(table_name, data_path):
         result_type="markdown",
         async_mode=True,
         encoding="utf-8",
-        language="vi",
         api_key=os.getenv("LLAMA_CLOUD_API_KEY")
     )
     file_extractor = {".pdf": parser, ".docx": parser}
@@ -65,7 +77,7 @@ def load_data_vectostore(table_name, data_path):
 
     return table_name
 
-def load_indexs(vectorstore_table):
+async def load_indexs(vectorstore_table):
     try:
         logging.info(f"Khởi tạo vector store cho bảng: {vectorstore_table}")
         

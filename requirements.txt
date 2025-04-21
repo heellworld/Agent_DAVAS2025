@@ -21,6 +21,7 @@ llama-index
 openai
 llama-index-core
 
+llama-index-storage-index_store-postgres
 llama-index-vector-stores-postgres
 llama-index-embeddings-huggingface
 llama-index-embeddings-openai

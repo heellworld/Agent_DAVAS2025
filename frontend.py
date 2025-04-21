@@ -10,11 +10,16 @@ if "chat_history" not in st.session_state:
 
 def chatbot_response(user_input):
     try:
-        res = requests.post(API_URL, json={"message": user_input})
+        headers = {"Content-Type": "application/json"}
+        res = requests.post(
+            API_URL,
+            json={"query": user_input},  # Key đã thay đổi
+            headers=headers
+        )
         if res.status_code == 200:
             return res.json().get("response", "Không có phản hồi từ chatbot.")
         else:
-            return f"🚫 Lỗi: {res.status_code}"
+            return f"🚫 Lỗi: {res.status_code} - {res.text}"  # Hiển thị chi tiết lỗi
     except Exception as e:
         return f"⚠️ Không kết nối được tới API: {e}"
 
