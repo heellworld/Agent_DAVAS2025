@@ -15,5 +15,5 @@ if __name__ == "__main__":
 
     print("\n🚀 Starting Davas Chatbot API server...")
     # Chạy FastAPI app với Uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=False) # reload=True để tự động load lại khi có thay đổi code
+    uvicorn.run(app, host="0.0.0.0", port=10000, reload=False) # reload=True để tự động load lại khi có thay đổi code
 
