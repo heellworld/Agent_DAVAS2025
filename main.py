@@ -4,7 +4,7 @@ from src.ai_project.agent import initialize_vector_stores
 import asyncio
 
 if __name__ == "__main__":
-    # # Khởi tạo vector stores trước khi bắt đầu
+    # Khởi tạo vector stores trước khi bắt đầu
     # try:
     #     print("Đang khởi tạo dữ liệu, vui lòng chờ...")
     #     asyncio.run(initialize_vector_stores())
