@@ -44,19 +44,30 @@ CÂU HỎI: {text}
 
 event_years = ["Davas2024", "Davas2025"]
 
-async def initialize_vector_stores():
-    """Khởi tạo vector store cho các năm sự kiện"""
-    base_path = os.path.dirname(os.path.abspath(__file__))
+# async def initialize_vector_stores():
+#     """Khởi tạo vector store cho các năm sự kiện"""
+#     base_path = os.path.dirname(os.path.abspath(__file__))
     
-    await load_data_vectostore(
-        "Davas2024", 
-        os.path.join(base_path, "data", "Davas2024")
-    )
+#     await load_data_vectostore(
+#         "Davas2024", 
+#         os.path.join(base_path, "data", "Davas2024")
+#     )
     
-    await load_data_vectostore(
-        "Davas2025", 
-        os.path.join(base_path, "data", "Davas2025")
-    )
+#     await load_data_vectostore(
+#         "Davas2025", 
+#         os.path.join(base_path, "data", "Davas2025")
+#     )
+
+def initialize_vector_stores():
+    # __file__ là …\src\ai_project\agent.py
+    base_path = os.path.dirname(os.path.abspath(__file__))      # …\src\ai_project
+    src_root  = os.path.dirname(base_path)                      # …\src
+
+    for year in event_years:
+        data_dir = os.path.join(src_root, "data", year)
+        print(f"→ Loading vector store from {data_dir}")
+        load_data_vectostore(year, data_dir)
+        
 async def create_query_engines():
     """Tạo công cụ truy vấn cho từng năm sự kiện"""
     query_engine_tools = []

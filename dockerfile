@@ -19,9 +19,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Set Python path
-ENV PYTHONPATH=/app/src
+ENV PYTHONPATH=/app
 
 # Set working directory to src
-WORKDIR /app/src
+WORKDIR /app
 
 CMD ["python", "main.py"]
