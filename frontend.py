@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import time
 
-API_URL = "http://localhost:8000/api/chat"
+API_URL = "https://0636-2405-4803-b600-80-e162-67d1-fb70-3d31.ngrok-free.app/api/chat"
 
 # Lưu trữ lịch sử chat
 if "chat_history" not in st.session_state:

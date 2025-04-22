@@ -3,6 +3,7 @@ import uvicorn
 from src.api import app
 from src.ai_project.agent import initialize_vector_stores
 
+
 async def main():
     # Khởi tạo vector stores trước khi bắt đầu
     try:
