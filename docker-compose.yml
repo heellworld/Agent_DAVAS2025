@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: vectodb_davas
+    ports:
+      - "5432:5432"
+    shm_size: '1g'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  ollama:
+    image: ollama/ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    command: ["ollama", "serve"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "10000:10000"
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    environment:
+      LLAMA_CLOUD_API_KEY: ${LLAMA_CLOUD_API_KEY}
+      DATABASE_URL: "postgresql://postgres:123456@db:5432/vectodb_davas"
+      OLLAMA_ENDPOINT: "http://ollama:11434"
+    volumes:
+      - ./src/data:/app/src/data  # Mount thư mục data
+
+volumes:
+  postgres_data:
+  ollama_data:

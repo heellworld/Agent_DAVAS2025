@@ -46,9 +46,17 @@ event_years = ["Davas2024", "Davas2025"]
 
 async def initialize_vector_stores():
     """Khởi tạo vector store cho các năm sự kiện"""
-    # await load_data_vectostore("Davas2024", r"D:\project_company\Agent_DAVAS2025\src\data\Davas2024")
-    await load_data_vectostore("Davas2025", r"D:\project_company\Agent_DAVAS2025\src\data\Davas2025")
-
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    
+    await load_data_vectostore(
+        "Davas2024", 
+        os.path.join(base_path, "data", "Davas2024")
+    )
+    
+    await load_data_vectostore(
+        "Davas2025", 
+        os.path.join(base_path, "data", "Davas2025")
+    )
 async def create_query_engines():
     """Tạo công cụ truy vấn cho từng năm sự kiện"""
     query_engine_tools = []
@@ -80,7 +88,7 @@ async def chatbot_agent(text: str):
         
         agent = ReActAgent.from_tools(
             tools=query_engine_tools,
-            llm=llm_gemma_4b,
+            llm=llm_qwen25_3b,
             verbose=True
         )
         
