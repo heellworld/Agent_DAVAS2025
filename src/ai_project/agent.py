@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import nest_asyncio
 from llama_index.core.tools import QueryEngineTool
 from llama_index.core.agent import ReActAgent
-from config.models_llm import llm_qwen25_3b, llm_gemma_4b, llm_gemini
+from config.models_llm import llm_qwen25_3b, llm_gemma_4b
 from .index_to_vectostore import load_data_vectostore, load_indexs
 
 # Thiết lập cơ bản
@@ -80,7 +80,7 @@ async def chatbot_agent(text: str):
         
         agent = ReActAgent.from_tools(
             tools=query_engine_tools,
-            llm=llm_gemini,
+            llm=llm_gemma_4b,
             verbose=True
         )
         
